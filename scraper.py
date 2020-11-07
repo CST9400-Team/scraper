@@ -26,8 +26,8 @@ with open('data.csv', 'w',newline='') as csvfile:
 '''
 
 
-client = pymongo.MongoClient("mongodb+srv://tejus:team20@cluster0.ymzum.gcp.mongodb.net/testDB?retryWrites=true&w=majority")
-db = client["testDB"]
+client = pymongo.MongoClient("mongodb+srv://tejus:<PASSWORD>@cluster0.ymzum.gcp.mongodb.net/<DATABASE_NAME>?retryWrites=true&w=majority")
+db = client.test
 mycol = db["testCollection"]
 
 
