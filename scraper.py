@@ -27,20 +27,90 @@ with open('data.csv', 'w',newline='') as csvfile:
 
 
 client = pymongo.MongoClient("mongodb+srv://tejus:team20@cluster0.ymzum.gcp.mongodb.net/testDB?retryWrites=true&w=majority")
-db = client.test
+db = client["testDB"]
 mycol = db["testCollection"]
+
 
 for tID in arr:
     omdbPage = urlopen(Request("http://www.omdbapi.com/?apikey=8fa02782&i="+tID, headers={'User-Agent': 'Mozilla/5.0'})).read()
     omdbJson = json.loads(omdbPage)
     title = omdbJson["Title"]
-    year = omdbJson["Year"]
+    year = int(omdbJson["Year"])
     rated = omdbJson["Rated"]
     released = omdbJson["Released"]
     runtime = omdbJson["Runtime"]
-    genre = omdbJson["Genre"]
-    runtime = omdbJson["Director"]
+    runtime = int(runtime[0:-4])
+
+    genres = []
+    for g in omdbJson["Genre"].split(", "):
+        genres.append(g)
+    genre = genres
+
+    directors = []
+    for d in omdbJson["Director"].split(", "):
+        directors.append(d)
+    director = directors
+
+    writer = omdbJson["Writer"]
+
+    actors = []
+    for a in omdbJson["Actors"].split(", "):
+        actors.append(a)
+    actor = actors
     
-    x = mycol.insert_one(omdbJson)
+    plot = omdbJson["Plot"]
+
+    languages = []
+    for l in omdbJson["Language"].split(", "):
+        languages.append(l)
+    language = languages
+
+    countries = []
+    for c in omdbJson["Country"].split(", "):
+        countries.append(c)
+    country = countries
+
+    plot = omdbJson["Plot"]
+    awards = omdbJson["Awards"]
+    poster = omdbJson["Poster"]
+    ratings = omdbJson["Ratings"]
+    metascore = omdbJson["Metascore"]
+    imdbRating = omdbJson["imdbRating"]
+    imdbVotes = omdbJson["imdbVotes"]
+    imdbID = omdbJson["imdbID"]
+    typeOfMovie = omdbJson["Type"]
+    dvd = omdbJson["DVD"]
+
+    productions = []
+    for p in omdbJson["Production"].split(", "):
+        productions.append(p)
+    production = productions
+
+    dictionary = {
+        "Title": title,
+        "Year": year,
+        "Rated":rated,
+        "Released":released,
+        "Runtime": runtime,
+        "Genre":genres,
+        "Directors":directors,
+        "Writer":writer,
+        "Actors": actor,
+        "Plot": plot,
+        "Language": language,
+        "Country": country,
+        "Awards": awards,
+        "Poster":poster,
+        "Ratings": ratings,
+        "Metascore": metascore,
+        "imdbRating": imdbRating,
+        "imdbVotes": imdbVotes,
+        "imdbID": imdbID,
+        "Type": typeOfMovie,
+        "DVD": dvd,
+        "Productions": production
+    }
+    print(dictionary)
+    x = mycol.insert_one(dictionary)
 
     
